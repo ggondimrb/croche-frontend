@@ -15,7 +15,7 @@ const Header: React.FC = () => {
         <Left>
           <h4>Olá {user ? user.name : ' Visitante'}</h4>
           {!signed && <Link to="/login/home">Entrar</Link>}
-          {!signed && <Link to="/login">Cadastrar</Link>}
+          {!signed && <Link to="/register">Cadastrar</Link>}
           {signed && <Link onClick={signOut} to="/">Sair</Link>}
         </Left> 
         <Right>

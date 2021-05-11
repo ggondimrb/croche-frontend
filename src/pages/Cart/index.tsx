@@ -124,7 +124,7 @@ const Cart: React.FC = () => {
       console.log('logado');
       history.push('/checkout');  
     } else {
-      history.push('/login?redirect=/checkout');  
+      history.push('/login/checkout');  
     }
     
   }

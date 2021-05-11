@@ -1,7 +1,11 @@
 import styled from 'styled-components';
+import Button from '../../components/Button';
 
 export const Container = styled.div`
-
+  display: flex;
+  width: 100%;
+  max-width: 1000px;  
+  margin: auto;
 `;
 
 export const Form = styled.form`
@@ -18,13 +22,17 @@ export const Form = styled.form`
     align-items: end;  
     margin-bottom: 10px;  
 
-    h1 {
+    h2 {
       margin-left: 10px;
     }
   }
 
+  h2 {
+      margin-top: 15px;
+    }
+
   input {
-    width: 100%;
+    width: 500px;
     height: 3rem;
     margin-top: 0.2rem;
     margin-bottom: 0.4rem;
@@ -45,6 +53,17 @@ export const Form = styled.form`
       right: 1.6rem;
       bottom: 0;
     }
+
+    label {
+      font-size: 1rem;
+      color: var(--primary);
+    }
   }
 
+`;
+
+export const ButtonConfirm = styled(Button)`
+  width: 500px;
+  margin-top: 50px;
+  margin-left: 0;
 `;
