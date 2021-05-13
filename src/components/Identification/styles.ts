@@ -13,7 +13,7 @@ export const Form = styled.form`
   flex-direction: column;
   min-width: 300px;
   padding: 10px;
-  width: 100%;
+  width: 50%;
 
   header {
     display: flex;

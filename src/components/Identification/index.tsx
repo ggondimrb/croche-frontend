@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm, SubmitHandler, Resolver } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import ErrorMessage from '../../components/ErrorMessage';
 import { MdPerson } from "react-icons/md";
@@ -8,17 +8,16 @@ import { Container, Form, ButtonConfirm } from './styles';
 import apiCep from '../../services/apiCep';
 import { InputFret } from '../../pages/Cart/styles';
 import Input from '../../components/Input';
+import api from '../../services/api';
 
 interface FormValues {
   name: string;
   mail: string;
   phone: string;
-  cpf: string;
   password: string;
   confirmPassword: string;
-  cep: string;
   adress: string;
-  number: number;
+  num: number;
   complement: string;  
   district: string;
   city: string;
@@ -31,133 +30,208 @@ interface Adress {
   bairro: string;
   localidade: string;
   uf: string;
-  numero: number;
-  complemento: string;
+  erro: string;
 }
 
-const resolver: Resolver<FormValues> = async (values) => {
-  return {
-    values: values.name ? values : {},
-    errors: !values.name
-      ? {
-          name: {
-            type: 'required',
-            message: 'Nome Completo',
-          },
-        }
-      : {},
-  };
-};
+const initialState = {
+  logradouro: "",
+  bairro: "",
+  localidade: "",
+  uf: "",
+  erro: ""
+}
+
+type ResponseAdress = {
+  data: Adress;
+}
+
+type ResponseCreate = {
+  data: Data;
+}
+
+type Data = {
+  status: number;
+  errors: Error[];
+}
+
+type Error = {
+  fieldName: string;
+  message: string;
+}
+
 
 const Identification: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({resolver});
-  const onSubmit: SubmitHandler<FormValues> = data => console.log(data);
+  
+  const { register, handleSubmit, errors } = useForm<FormValues>();
+  
+
+  const onSubmit = handleSubmit((data) => {
+    
+    if(validateCpfAndCep()){
+      console.log(data);
+      console.log(adress);
+      create(data);
+    }
+
+  });
+
+  async function create(data: FormValues) {
+    const {name} = data;
+    const response: ResponseCreate = await api.post('/clientes',{
+      name, adress
+    })
+
+    console.log(response);
+    ;
+  }
+
+  function validateCpfAndCep() {
+    
+    if(!cpf) {
+      setCpfValid(false);
+      return false;
+    } else {
+      setCpfValid(true);
+    }
+
+    if(!validateCep(cep)) {
+      setCepValid(false);
+      return false;
+    } else {
+      setCepValid(true);
+    }
+
+    return true;
+  }
+
+  function validateCep(cep: string) {
+    return (cep && cep.length === 9 && cep.replace(/[^0-9]/g,"").length === 8);
+  }
 
   const [cep, setCep] = useState<string>('');
+  const [cpf, setCpf] = useState<string>('');
+
+  const [cepValid, setCepValid] = useState<Boolean>(true);
+  const [cpfValid, setCpfValid] = useState<Boolean>(true);  
+  
   const [adress, setAdress] = useState<Adress>({} as Adress);
 
   async function findAdress() {
-    const response = await apiCep.get(`${cep}/json/`);    
-    setAdress(response.data);
+    console.log(cep);
+    if(validateCep(cep)) {
+
+      const response : ResponseAdress = await apiCep.get(`${cep}/json/`);
+
+      if(response.data.erro) {        
+        setAdress(initialState);
+      } else {
+        setAdress(response.data);        
+      } 
+    } else {
+      setAdress(initialState);
+    }  
+    
   }
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={onSubmit}>
         <header>
           <MdPerson size={36} color="#FFF" />
           <h2>Identificação</h2>
         </header>
         <label>Nome Completo</label>
         <input 
+          id="name"
           name="name" 
-          ref={register} 
+          type="text"
+          ref={register({ required: true })}
         />
-        {errors?.name && <ErrorMessage message={errors.name.message} />}
+        {errors.name && <ErrorMessage message="Nome" />}
         <label>CPF</label>
         <InputMask  
           name="cpf"                                                      
           mask="999.999.999-99"
-          ref={register}      
-          placeholder="999.999.999-99"                                      
-        />                
+          value={cpf}
+          onChange={(e) => setCpf(e.target.value)}
+          placeholder="999.999.999-99"             
+        />          
+        {!cpfValid && <ErrorMessage message="CPF"/>}
         <label>Celular</label>
         <input 
           name="phone" 
-          ref={register} 
+          type="text"
+          ref={register({ required: true })}
         />        
+        {errors.phone && <ErrorMessage message="Celular" />}
         <label>E-mail</label>
         <input 
           name="mail" 
-          ref={register}             
+          ref={register({ required: true })}
         />
+        {errors.mail && <ErrorMessage message="E-mail" />}
         <label>Senha</label>
         <input 
           name="password" 
-          ref={register} 
+          ref={register({ required: true })}
           type="password"
-        />              
+        />
+        {errors.password && <ErrorMessage message="Senha" />}              
         <label>Confirmar Senha</label>
         <input 
           name="confirmPassword" 
-          ref={register} 
+          ref={register({ required: true })}
           type="password"           
-        />              
+        />            
+        {errors.confirmPassword && <ErrorMessage message="Confirmar Senha" />}                
         <h2>Dados de Entrega</h2>
-        <div>
-          <h4>CEP</h4>
-          <InputFret id="fret"                                                      
-                      mask="99999-999"                                                 
-                      value={cep} 
-                      onChange={(e) => setCep(e.target.value)}
-                      onBlur={(e) => findAdress()} />
-          <div>
-            <label>Endereço</label>                      
-            <Input 
-              name="adress"
-              label=""
-              value={adress.logradouro}
-              disabled />
-          </div>
-          <div>
-            <label>Número</label>                      
-            <Input 
-              name="num"
-              label=""
-              value={adress.numero}/>
-          </div>
-          <div>
-            <label>Complemento</label>                      
-            <Input 
-              name="complement"
-              label=""
-              value={adress.complemento}/>
-          </div>   
-          <div>
-            <label>Bairro</label>                      
-            <Input 
-              name="district"
-              label=""
-              value={adress.bairro}
-              disabled />
-          </div>
-          <div>
-            <label>Cidade</label>                      
-            <Input 
-              name="city"
-              label=""
-              value={adress.localidade}
-              disabled />
-          </div>
-          <div>
-            <label>UF</label>                                    
-            <Input 
-              name="uf"
-              label=""
-              value={adress.uf}
-              disabled />                                                                                
-          </div>                                                                                
-        </div>
+        <label>CEP</label>
+        <InputFret id="cep"                                                      
+                    mask="99999-999"                                                 
+                    value={cep} 
+                    onChange={(e) => setCep(e.target.value)}
+                    onBlur={(e) => findAdress()} />
+        {!cepValid && <ErrorMessage message="CEP"/>}
+        <label>Endereço</label>                      
+        <Input 
+          name="adress"
+          label=""
+          value={adress.logradouro}
+          disabled />
+        <label>Número</label>                      
+        <input 
+          name="num"
+          type="number"
+          min="1"
+          ref={register({ required: true })}
+        />
+        {errors.num && <ErrorMessage message="Número" />}
+        <label>Complemento</label>                      
+        <input 
+          name="complement"
+          type="text"
+          maxLength={100}
+          ref={register({ required: true })}
+        />
+        {errors.complement && <ErrorMessage message="Complemento" />}
+        <label>Bairro</label>                      
+        <input 
+          name="district"
+          value={adress.bairro}
+          disabled 
+        />
+        <label>Cidade</label>                      
+        <input 
+          name="city"
+          value={adress.localidade}
+          disabled 
+        />
+        <label>UF</label>                                    
+        <input 
+          name="uf"
+          value={adress.uf}
+          disabled 
+        />
         <ButtonConfirm type="submit">
           Avançar 
         </ButtonConfirm>

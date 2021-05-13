@@ -27,7 +27,8 @@
     "react-slideshow-image": "^3.3.0",
     "react-toastify": "^7.0.2",
     "styled-components": "^5.2.0",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "start": "react-scripts start",

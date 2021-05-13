@@ -9,7 +9,7 @@ import Button from "../Button";
 import { useAuth } from "../../contexts/auth";
 
 const Main: React.FC<{ categoria?:string }> = ({categoria}) => {
-  const [products, setProducts] = useState([]);  
+  const [products, setProducts] = useState<IProduct[]>([]);  
   const [totalElements, setTotalElements] = useState<number>(0);  
   const [actualPage, setActualPage] = useState<number>(1); 
   const [pageSize, setPageSize] = useState<number>(0);   
