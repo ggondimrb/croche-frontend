@@ -12,7 +12,11 @@ interface AuthContextData {
   user: UserProps | null;
 }
 
-interface UserProps {
+type ResponseUserProps = {
+  data: UserProps;
+}
+
+type UserProps = {
   id: number;
   name: string;
   email: string;
@@ -77,7 +81,7 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
 
       if(responseToken.data){        
         setStorageToken(responseToken.data);
-        setStorageUser({name:email,email});
+        setDataUser(email);
         console.log(user);
       }          
     } catch (error) {
@@ -91,6 +95,16 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
     // // api.defaults.headers.Authorization = `Baerer ${response.token}`;
     // setStorageUser(response.user);
     
+  }
+
+  async function setDataUser(mail: string) {
+
+  const response: ResponseUserProps = await api.get(`clientes/${mail}`);  
+
+  console.log(response);
+
+  const {name, email} = response.data;    
+    setStorageUser({name,email});
   }
 
   const getToken = () =>{

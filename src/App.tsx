@@ -12,7 +12,7 @@ function App() {
       <CartProvider>    
         <Routes />
         <GlobalStyles />
-        <ToastContainer />
+        <ToastContainer autoClose={3000}/>
       </CartProvider>
     </AuthProvider>
   );

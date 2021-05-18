@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ErrorMessage from '../../components/ErrorMessage';
 import { MdPerson } from "react-icons/md";
 import InputMask from 'react-input-mask';
@@ -9,6 +11,7 @@ import apiCep from '../../services/apiCep';
 import { InputFret } from '../../pages/Cart/styles';
 import Input from '../../components/Input';
 import api from '../../services/api';
+import { useAuth } from '../../contexts/auth';
 
 interface FormValues {
   name: string;
@@ -61,28 +64,51 @@ type Error = {
 
 
 const Identification: React.FC = () => {
-  
+  const { signIn } = useAuth();
   const { register, handleSubmit, errors } = useForm<FormValues>();
+  const history = useHistory();
   
 
   const onSubmit = handleSubmit((data) => {
     
     if(validateCpfAndCep()){
-      console.log(data);
-      console.log(adress);
       create(data);
     }
 
   });
 
   async function create(data: FormValues) {
-    const {name} = data;
-    const response: ResponseCreate = await api.post('/clientes',{
-      name, adress
-    })
+    const {name, phone, mail, password, confirmPassword, num, complement} = data;
+    const {logradouro, bairro, localidade, uf} = adress;
+    const cpfFormat = cpf.replace('.','').replace('.','').replace('-','');
+    const cepFormat = cep.replace('-','');
 
-    console.log(response);
-    ;
+    try {
+      const response: ResponseCreate = await api.post('/clientes',{
+        name, phone, mail, password, confirmPassword, num, complement,
+        logradouro, bairro, localidade, uf, cep: cepFormat, cpf: cpfFormat,
+        type: 1
+      })
+
+      console.log(response);
+
+      if(response) {
+        toast.success("Cliente adicionado com sucesso!");
+        await signIn(mail,password);
+        history.push("/");
+        
+      }
+
+    } catch (e) {
+      
+      if(e.response.data.errors) {
+        const responseErrors : Error[] = e.response.data.errors;    
+
+        responseErrors.forEach((erro: Error) => 
+           toast.error(erro.message)
+        )
+      }
+    }
   }
 
   function validateCpfAndCep() {

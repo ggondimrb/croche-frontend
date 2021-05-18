@@ -13,7 +13,7 @@ const Header: React.FC = () => {
     <Container>   
       <Wrapper>
         <Left>
-          <h4>Olá {user ? user.name : ' Visitante'}</h4>
+          <h4>Olá {user ? user.name : ''}!</h4>
           {!signed && <Link to="/login/home">Entrar</Link>}
           {!signed && <Link to="/register">Cadastrar</Link>}
           {signed && <Link onClick={signOut} to="/">Sair</Link>}
