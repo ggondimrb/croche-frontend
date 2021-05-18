@@ -90,8 +90,6 @@ const Identification: React.FC = () => {
         type: 1
       })
 
-      console.log(response);
-
       if(response) {
         toast.success("Cliente adicionado com sucesso!");
         await signIn(mail,password);

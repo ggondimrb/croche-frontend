@@ -5,7 +5,6 @@ export const Container = styled.div`
   flex-direction: column;
   background: #fadcc4;
   width: 100%;
-  height: 100vh;
 `;
 
 export const Wrapper = styled.div`
@@ -66,6 +65,45 @@ export const Block = styled.div`
     h1 {
       margin-left: 10px;
     }
+  } 
+
+`;
+
+export const Resume = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 800px;
+  padding: 10px;  
+
+  header {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #d7d8da;    
+    margin-bottom: 10px;  
+
+    h1 {
+      margin-left: 10px;
+    }
+  } 
+
+`;
+
+export const DeliveryAddress = styled.div`
+
+  header {
+      display: flex;
+      flex-direction: row;
+      border-bottom: 1px solid #d7d8da;    
+      margin-bottom: 10px;  
+
+      h1 {
+        margin-left: 10px;
+      }
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;    
   } 
 
 `;

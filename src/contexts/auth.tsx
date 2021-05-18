@@ -9,7 +9,18 @@ interface AuthContextData {
   signed: boolean;
   getToken(): string | null;
   getLoading(): boolean | null;
-  user: UserProps | null;
+  user: IUser;
+}
+
+type IUser = {
+  name: string;
+  email: string;  
+  street: string;
+  num: string;
+  complement: string;
+  district: string;
+  city: string;
+  cep: string;
 }
 
 type ResponseUserProps = {
@@ -20,6 +31,16 @@ type UserProps = {
   id: number;
   name: string;
   email: string;
+  adresses: IAddress[];
+}
+
+type IAddress = {
+  street: string;
+  num: string;
+  complement: string;
+  district: string;
+  city: string;
+  cep: string;
 }
 
 type AuthContextProviderProps = {
@@ -33,7 +54,7 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
   const [storageUser, setStorageUser, removeStorageUser] = useLocalStorage('@authApp: user');
   const [storageToken, setStorageToken, removeStorageToken] = useLocalStorage('@authApp: token');
 
-  const [user, setUser] = useState<UserProps>({} as UserProps);
+  const [user, setUser] = useState<IUser>({} as IUser);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -103,8 +124,28 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
 
   console.log(response);
 
-  const {name, email} = response.data;    
-    setStorageUser({name,email});
+  const {
+    name, 
+    email, 
+    adresses
+  } = response.data; 
+  
+  const {  street,
+    num,
+    complement,
+    district,
+    city,
+    cep} = adresses[0];
+
+  setStorageUser({
+    name, 
+    email, 
+    street,
+    num,
+    complement,
+    district,
+    city,
+    cep});
   }
 
   const getToken = () =>{
@@ -120,7 +161,7 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
     setLoading(true);
     removeStorageUser();
     removeStorageToken();
-    setUser({} as UserProps);
+    setUser({} as IUser);
     setLoading(false);
   }, [removeStorageToken, removeStorageUser]);
 
