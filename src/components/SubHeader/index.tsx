@@ -28,7 +28,7 @@ const SubHeader: React.FC<SubHeaderProps> = ({showJustLogo}) => {
           <strong>Meu carrinho</strong>
           <span>{cart.length} itens</span>
         </div>
-        <MdShoppingBasket size={36} color="#FFF" />
+        <MdShoppingBasket size={36} />
       </Cart>}  
     </Container>
   );
