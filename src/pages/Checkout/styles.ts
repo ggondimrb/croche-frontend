@@ -5,6 +5,13 @@ export const Container = styled.div`
   flex-direction: column;
   background: #fadcc4;
   width: 100%;
+  min-height: 95vh;
+
+  p {
+    align-self: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
 `;
 
 export const Wrapper = styled.div`
@@ -89,6 +96,10 @@ export const Resume = styled.div`
 `;
 
 export const DeliveryAddress = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  padding: 10px;  
 
   header {
       display: flex;
@@ -130,8 +141,8 @@ export const ItemResume = styled.li`
   align-items: flex-start;
   
   img {
-    width: 100px;
-    height: 100px;   
+    width: 120px;
+    height: 120px;   
     margin-right: 10px; 
   }
 

@@ -7,22 +7,29 @@ import { MdShoppingBasket } from "react-icons/md";
 import SearchBar from "../SearchBar";
 import { useCart } from "../../contexts/cart";
 
-const SubHeader: React.FC = () => {
+interface SubHeaderProps {
+  showJustLogo?: boolean;
+}
+
+const SubHeader: React.FC<SubHeaderProps> = ({showJustLogo}) => {
   const {cart} = useCart();
   
   return (
     <Container>    
-      <SearchBar/>  
+      {!showJustLogo && <SearchBar/>}
+      {showJustLogo && <div/>}
       <Link to="/" style={{justifySelf: 'center'}}>
         <Logo src={logo} alt="logo" />
       </Link>      
+      {showJustLogo && <div/>}
+      {!showJustLogo && 
       <Cart to="/cart">
         <div>
           <strong>Meu carrinho</strong>
           <span>{cart.length} itens</span>
         </div>
         <MdShoppingBasket size={36} color="#FFF" />
-      </Cart>      
+      </Cart>}  
     </Container>
   );
 };
