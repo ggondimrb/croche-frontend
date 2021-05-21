@@ -7,6 +7,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 
 function Routes() {
   return (
@@ -18,7 +19,8 @@ function Routes() {
       <Route path="/search/:categoria" component={Home} />      
       <Route path="/checkout" component={Checkout} />  
       <Route path="/login/:redirect" component={Login} />  
-      <Route path="/register" component={Register} />  
+      <Route path="/register" component={Register} />
+      <Route path="/profile/:id" component={Profile} />
     </BrowserRouter>
   );
 }
