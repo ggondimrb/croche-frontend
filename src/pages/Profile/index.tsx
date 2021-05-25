@@ -1,48 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import * as FaIcons from 'react-icons/fa';
-import * as AiIcons from 'react-icons/ai';
-import * as IoIcons from 'react-icons/io';
+import { MdLocalShipping, MdHome, MdAccountCircle } from "react-icons/md";
 
 import DefaultLayout from '../DefaultLayout';
 
-import { Container, Wrapper, SideMenu, MyOrders, MyAdress } from './styles';
+import { Container, Wrapper, SideMenu, MyOrders, MyAdress, Right } from './styles';
+import Button from '../../components/Button';
 
 const SidebarData = [
   {
-    title: 'Home',
-    path: '/',
-    icon: <AiIcons.AiFillHome />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'Orders',
+    title: 'Pedidos',
     path: 'orders',
-    icon: <IoIcons.IoIosPaper />,
+    icon: <MdLocalShipping size={24} />,
     cName: 'nav-text'
   },
   {
-    title: 'Adress',
+    title: 'Meus Endereços',
     path: 'adress',
-    icon: <FaIcons.FaCartPlus />,
+    icon: <MdHome size={24} />,
     cName: 'nav-text'
   },
   {
-    title: 'Team',
-    path: '/team',
-    icon: <IoIcons.IoMdPeople />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'Messages',
-    path: '/messages',
-    icon: <FaIcons.FaEnvelopeOpenText />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'Support',
-    path: '/support',
-    icon: <IoIcons.IoMdHelpCircle />,
+    title: 'Dados Pessoais',
+    path: 'personalData',
+    icon: <MdAccountCircle size={24} />,
     cName: 'nav-text'
   }
 ]
@@ -56,15 +37,22 @@ export default function Profile() {
 
   const [showOrders, setShowOrders] = useState<boolean>(false);
   const [showAdress, setShowAdress] = useState<boolean>(false);
+  const [showPersonalData, setShowPersonalData] = useState<boolean>(false);
+  const [pathSelect, setPathSelect] = useState<string>('');
 
   useEffect(() => {
     if(params.id === 'orders') {
       setShowOrders(true);
+      setPathSelect('orders');
     } else if (params.id === 'adress') {
       setShowAdress(true);
+      setPathSelect('adress');
+    } else if (params.id === 'personalData') {
+      setShowPersonalData(true);
+      setPathSelect('personalData');
     }
 
-  },[showOrders, params.id])
+  },[params.id])
 
   return (
     <Container>
@@ -73,20 +61,45 @@ export default function Profile() {
         <SideMenu>
         {SidebarData.map((item, index) => {
               return (
-                <li key={index} className={item.cName}>
-                  <Link to={`${item.path}`}>
-                    {item.icon}
-                    <span>{item.title}</span>
-                  </Link>
-                </li>
+                <Link to={`${item.path}`}>
+                  <li key={index} className={pathSelect === item.path ? 'active' : ''}>                  
+                      {item.icon}
+                      <span>{item.title}</span>
+                  </li>
+                </Link>
               );
         })}
         </SideMenu>
-
+        <Right>
+          {showOrders && 
+            <MyOrders>
+              <h1>Pedidos</h1>
+              <ul>
+                <li>
+                  <div>
+                    <img alt="roupa" src="https://curso-spring-ionic-47.s3-sa-east-1.amazonaws.com/bolsa01a.png"/>
+                    <h3>Biquini feito em croche</h3>
+                    <p>Cor: <strong>Azul</strong></p>
+                    <p>Tamanho: <strong>Único</strong></p>
+                    <p>Quantidade: <strong>1</strong></p>
+                    <p>Valor Unitário: <strong>R$ 29,99</strong></p>
+                  </div>
+                  <div>
+                    <h3>Resumo da compra</h3>
+                    <p>Pedido: <strong>4324324</strong></p>
+                    <p>Data do Pedido: <strong>25/05/2020</strong></p>
+                    <p>Previsão de Entrega: <strong>Até 13/04/2020</strong></p>
+                    <p>Status: <strong>Entregue</strong></p>
+                    <Button>Ver detalhes</Button>
+                  </div>
+                </li>
+              </ul>
+            </MyOrders>
+          }
+          {showAdress && <MyAdress><h1>Meus Endereços</h1></MyAdress>}
+          {showPersonalData && <MyAdress><h1>Seus Dados</h1></MyAdress>}
+        </Right>
       </Wrapper>
-      {showOrders && <MyOrders><h1>Meus Pedidos</h1></MyOrders>}
-      {showAdress && <MyAdress><h1>Meus Endereços</h1></MyAdress>}
-      <h1>Profile</h1>
     </Container>
   );
 };
