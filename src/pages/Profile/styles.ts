@@ -13,8 +13,9 @@ export const Wrapper  = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100%;
+  min-height: 73.9vh;
   justify-content: center;
-  margin: 10px auto;
+  margin: 10px auto;  
 `;
 export const SideMenu  = styled.div`
   display: flex;
@@ -71,6 +72,7 @@ export const MyOrders  = styled.div`
     border-radius: 25px;   
     padding: 20px;
     margin: 10px; 
+    box-shadow: 5px 5px 5px #a9a9a9;
 
     div {
       width: 50%;
