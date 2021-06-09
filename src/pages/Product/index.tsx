@@ -41,7 +41,7 @@ export interface IProduct {
       id: number;
       url: string;
     }[],
-    urlImagens: string[]
+  urlImagens: string[]
 }
 
 export interface ProductItemProps {
