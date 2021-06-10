@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
 
 import { Container } from './styles';
-
-type ResponseOrders = {
-  data: {
-    content: IOrders[];
-  }
-}
 
 type IOrders = {
   id: number;
@@ -51,7 +46,7 @@ export default function MyOrders() {
     loadOrders();
     
     async function loadOrders(){
-      const response: ResponseOrders = await api.get('/pedidos',
+      const response = await api.get('/pedidos',
       {headers:{Authorization: `Bearer ${getToken()}`}});
 
       setOrders(response.data.content)
@@ -69,7 +64,7 @@ export default function MyOrders() {
                 <img alt={item.product.nome} src={item.product.urlImagens && item.product.urlImagens[0]}/>
                 <h3>{item.product.nome}</h3>
                 <p>Cor: <strong>Azul</strong></p>
-                <p>Tamanho: <strong>{item.product.ehTamanhoUnico}</strong></p>
+                <p>Tamanho: <strong>{item.product.ehTamanhoUnico === 'S' ? 'Único' : item.product.ehTamanhoUnico}</strong></p>
                 <p>Quantidade: <strong>{item.amount}</strong></p>
                 <p>Valor Unitário: <strong>R$ {item.price}</strong></p>
               </div>
@@ -80,7 +75,9 @@ export default function MyOrders() {
                 <p>Valor Total: <strong>R$ {order.totalValue}</strong></p>
                 <p>Previsão de Entrega: <strong>Até 13/04/2020</strong></p>
                 <p>Status: <strong>Entregue</strong></p>
-                <Button>Ver detalhes</Button>
+                <Link to={`/orders/${order.id}`}>
+                  <Button>Ver detalhes</Button>
+                </Link>
               </div>
             </li>
             ))
