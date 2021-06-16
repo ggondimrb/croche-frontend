@@ -8,7 +8,7 @@ import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import Orders from "./pages/Orders";
+import Order from "./pages/Order";
 
 function Routes() {
   return (
@@ -22,7 +22,7 @@ function Routes() {
       <Route path="/login/:redirect" component={Login} />  
       <Route path="/register" component={Register} />
       <Route path="/profile/:id" component={Profile} />
-      <Route path="/orders/:id" component={Orders} />
+      <Route path="/order/:id" component={Order} />
     </BrowserRouter>
   );
 }

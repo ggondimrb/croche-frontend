@@ -75,7 +75,7 @@ export default function MyOrders() {
                 <p>Valor Total: <strong>R$ {order.totalValue}</strong></p>
                 <p>Previsão de Entrega: <strong>Até 13/04/2020</strong></p>
                 <p>Status: <strong>Entregue</strong></p>
-                <Link to={`/orders/${order.id}`}>
+                <Link to={`/order/${order.id}`}>
                   <Button>Ver detalhes</Button>
                 </Link>
               </div>

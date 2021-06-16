@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+
 import { useHistory, useParams } from 'react-router-dom';
 import BottomBar from '../../components/BottomBar';
+import ProfileSideBar from '../../components/ProfileSideBar';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
 import DefaultLayout from '../DefaultLayout';
 
-import { Container, Wrapper } from './styles';
+import { Container, Wrapper, Right, DeliveryAndItens, BuyResume } from './styles';
 
 type RouteParams = {
 	id: string
@@ -15,7 +17,7 @@ type IOrder = {
   id:number;
 }
 
-function Orders() {
+function Order() {
   const {getToken} = useAuth();
   const params = useParams<RouteParams>();
   
@@ -36,11 +38,24 @@ function Orders() {
     <Container>
       <DefaultLayout />
       <Wrapper>
-        <h1>Pedidos</h1>
+        <ProfileSideBar />
+        <Right>
+          <h1>Pedido</h1>
+          <div>
+            <DeliveryAndItens>
+              <h1>Entrega </h1>
+            </DeliveryAndItens>
+            <BuyResume>
+              <h1>Resumo da compra </h1>
+              <h1>Resumo da compra </h1>
+              <h1>Resumo da compra </h1>
+            </BuyResume>
+          </div>
+        </Right>
       </Wrapper>
       <BottomBar />
     </Container>
   );
 };
 
-export default Orders;
+export default Order;

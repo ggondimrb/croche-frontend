@@ -26,6 +26,7 @@
     "react-scripts": "3.4.1",
     "react-slideshow-image": "^3.3.0",
     "react-toastify": "^7.0.4",
+    "rsuite": "^4.10.2",
     "styled-components": "^5.2.0",
     "typescript": "~3.7.2",
     "yup": "^0.32.9"

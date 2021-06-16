@@ -5,12 +5,15 @@ import {ToastContainer} from 'react-toastify';
 
 import GlobalStyles from "./styles/GlobalStyles";
 import { AuthProvider } from "./contexts/auth";
+import { MenuProvider } from "./contexts/menu";
 
 function App() {
   return (
     <AuthProvider>
-      <CartProvider>    
-        <Routes />
+      <CartProvider> 
+        <MenuProvider>
+          <Routes />
+        </MenuProvider>   
         <GlobalStyles />
         <ToastContainer autoClose={3000}/>
       </CartProvider>
