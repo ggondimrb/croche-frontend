@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { MdLocalShipping, MdHome, MdAccountCircle } from "react-icons/md";
 
 import { Container } from './styles';
 import { useMenu } from '../../contexts/menu';
-
-interface ProfileSideBarProps {
-  pathSelect: string;
-}
 
 const SidebarData = [
   {
@@ -49,12 +45,12 @@ function ProfileSideBar() {
           <ul>
             {SidebarData.map((item, index) => {
                   return (
-                    <li key={index} className={params.id === item.path ? 'active' : ''}> 
-                      <Link to={`${item.path}`} replace>            
-                            {item.icon}
-                            <span>{item.title}</span>
-                      </Link>
-                    </li>
+                    <Link to={`${item.path}`} replace>            
+                      <li key={index} className={params.id === item.path ? 'active' : ''}>
+                          {item.icon}
+                          <span>{item.title}</span>
+                      </li>
+                    </Link>
                   );
             })}
           </ul>

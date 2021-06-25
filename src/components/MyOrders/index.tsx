@@ -46,7 +46,7 @@ export default function MyOrders() {
     loadOrders();
     
     async function loadOrders(){
-      const response = await api.get('/pedidos',
+      const response = await api.get('/orders',
       {headers:{Authorization: `Bearer ${getToken()}`}});
 
       setOrders(response.data.content)

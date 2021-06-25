@@ -7,6 +7,8 @@ import GlobalStyles from "./styles/GlobalStyles";
 import { AuthProvider } from "./contexts/auth";
 import { MenuProvider } from "./contexts/menu";
 
+import './App.css';
+
 function App() {
   return (
     <AuthProvider>

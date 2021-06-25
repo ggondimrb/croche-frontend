@@ -15,6 +15,14 @@ export default createGlobalStyle`
    height: 100%;
  }
 
+ .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background-color: #d8966e !important;
+}
+
+
+
  ul{
   list-style: none;
  }

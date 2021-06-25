@@ -25,6 +25,7 @@ export const Left = styled.div`
   h4 {
     color: white;        
     line-height: 3;
+    font-size: 14px;
   }
 
   a {

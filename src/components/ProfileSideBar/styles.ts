@@ -11,6 +11,11 @@ export const Container = styled.div`
   li {
     list-style: none;
     padding: 10px;
+    transition: 0.2s;
+
+    &:hover {
+      background: #d8966e;
+    }
 
     span {
       font-size: 20px;
