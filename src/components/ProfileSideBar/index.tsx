@@ -13,13 +13,7 @@ const SidebarData = [
     cName: 'nav-text'
   },
   {
-    title: 'Meus Endereços',
-    path: '/profile/adress',
-    icon: <MdHome size={24} />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'Dados Pessoais',
+    title: 'Seus dados',
     path: '/profile/personalData',
     icon: <MdAccountCircle size={24} />,
     cName: 'nav-text'
@@ -35,9 +29,7 @@ function ProfileSideBar() {
   const {setPathSelect} = useMenu();
 
   useEffect(() => {
-    console.log(params.id);
     setPathSelect(params.id);
-
   },[params.id])
 
   return (

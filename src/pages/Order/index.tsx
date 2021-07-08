@@ -11,6 +11,7 @@ import DefaultLayout from '../DefaultLayout';
 import { Container, Wrapper, Right, BuyResume, DeliverySteps, Item } from './styles';
 import Button from '../../components/Button';
 import { formatPrice } from '../../util/format';
+import { toast } from 'react-toastify';
 
 type RouteParams = {
 	id: string
@@ -69,14 +70,20 @@ function Order() {
 
   useEffect(() => {
     async function loadOrder() {
-      const response = await api.get<IOrder>(`orders/${params.id}`,
-      {headers:{Authorization: `Bearer ${getToken()}`}});         
-      setOrder(response.data);    
-      console.log(response.data);
+      await api.get<IOrder>(`orders/${params.id}`,
+      {headers:{Authorization: `Bearer ${getToken()}`}})
+      .then((response) => {
+        setOrder(response.data);    
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error)
+        toast.error(error);
+      });         
     }
 
     loadOrder();
-  }, [params.id]);
+  }, [params.id, getToken]);
 
   return (
     <Container>

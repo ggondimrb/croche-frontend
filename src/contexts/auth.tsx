@@ -10,10 +10,14 @@ interface AuthContextData {
   getToken(): string | null;
   getLoading(): boolean | null;
   user: IUser;
+  refreshToken(): void;
 }
 
 type IUser = {
+  id: number;
   name: string;
+  cpf: string;
+  cellphone: string;
   email: string;  
   street: string;
   num: string;
@@ -23,15 +27,13 @@ type IUser = {
   cep: string;
 }
 
-type ResponseUserProps = {
-  data: UserProps;
-}
-
 type UserProps = {
   id: number;
   name: string;
   email: string;
+  cpfOuCnpj: string;
   adresses: IAddress[];
+  telefones: string[];
 }
 
 type IAddress = {
@@ -58,36 +60,18 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (storageToken) {      
-      refreshToken(storageToken);
-      setUser(storageUser);
-    }
+    console.log(storageUser);
+    // if (storageToken) {      
+    //   refreshToken(storageToken);
+    //   setUser(storageUser);
+    // }
 
     setLoading(false);       
-    
-    async function refreshToken(token:string) {
-
-      try {
-
-        const response = await api.get("auth/refresh_token",
-        {headers:{Authorization: `Bearer ${token}`}});
-    
-        if(response.data){
-          setStorageToken(response.data);
-        }
-
-      } catch (error) {
-        console.log('ERROOOO, LOGUE NOVAMENTE');
-        removeStorageUser();
-        removeStorageToken();
-      }
-
-    }
 
     // eslint-disable-next-line
   }, [user]);
 
-  async function signIn(email:string,senha:string) {
+  async function signIn(mail:string,senha:string) {
     
     setLoading(true);
 
@@ -96,15 +80,47 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
       removeStorageToken();
 
       const responseToken = await api.post('/login',{
-        email,
+        email: mail,
         senha
       });                  
 
       if(responseToken.data){        
         setStorageToken(responseToken.data);
-        setDataUser(email);
-        console.log(user);
-      }          
+
+        const response = await api.get<UserProps>(`clientes/${mail}`);  
+
+        const {
+          id,
+          name, 
+          email, 
+          adresses,
+          cpfOuCnpj,
+          telefones
+        } = response.data; 
+        
+        const {street,
+          num,
+          complement,
+          district,
+          city,
+          cep} = adresses[0];
+
+        const cellphone = telefones[0];
+
+        setStorageUser({
+          id,
+          name, 
+          email, 
+          cpf: cpfOuCnpj,
+          cellphone,
+          street,
+          num,
+          complement,
+          district,
+          city,
+          cep});
+
+        }          
     } catch (error) {
       setLoading(false);     
     }
@@ -120,26 +136,34 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
 
   async function setDataUser(mail: string) {
 
-  const response: ResponseUserProps = await api.get(`clientes/${mail}`);  
+  const response = await api.get<UserProps>(`clientes/${mail}`);  
 
   console.log(response);
 
   const {
+    id,
     name, 
     email, 
-    adresses
+    adresses,
+    cpfOuCnpj,
+    telefones
   } = response.data; 
   
-  const {  street,
+  const {street,
     num,
     complement,
     district,
     city,
     cep} = adresses[0];
 
+  const cellphone = telefones[0];
+
   setStorageUser({
+    id,
     name, 
     email, 
+    cpf: cpfOuCnpj,
+    cellphone,
     street,
     num,
     complement,
@@ -165,13 +189,33 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
     setLoading(false);
   }, [removeStorageToken, removeStorageUser]);
 
+  async function refreshToken() {
+
+    try {
+
+      const response = await api.get("auth/refresh_token",
+      {headers:{Authorization: `Bearer ${getToken()}`}});
+      
+      if(response.data){
+        setStorageToken(response.data[0]);
+        setDataUser(response.data[1]);
+      }
+
+    } catch (error) {
+      console.log('ERROOOO, LOGUE NOVAMENTE');
+      removeStorageUser();
+    }
+
+  }
+
   const store = {
     signIn,
     signOut,
-    signed: (user && user.email) ? true : false,
-    user,
+    signed: (storageUser && storageUser.email) ? true : false,
+    user: storageUser,
     getToken,
-    getLoading
+    getLoading,
+    refreshToken
   }
 
   return (

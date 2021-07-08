@@ -21,6 +21,22 @@ export default createGlobalStyle`
   background-color: #d8966e !important;
 }
 
+.ant-input {
+  border-radius: 25px;
+}
+
+.ant-btn-primary {
+    background: #d8966e;
+    border-color: #d8966e;
+    border-radius: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    border-radius: 25px;
+
+    :hover {
+      background: #9e5f39;
+      border-color: #9e5f39;      
+    }
+ }
 
 
  ul{

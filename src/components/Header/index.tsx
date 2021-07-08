@@ -14,7 +14,7 @@ const Header: React.FC = () => {
     <Container>   
       <Wrapper>
         <Left>
-          {signed && <Link to="/profile/home">
+          {signed && <Link to="/profile/orders">
           <MdAccountCircle 
             size={36} 
             style={{ fill: '#fff', marginTop:'3', marginRight:'5' }}/>

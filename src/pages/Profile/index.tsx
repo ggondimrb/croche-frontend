@@ -2,14 +2,15 @@ import React from 'react';
 
 import DefaultLayout from '../DefaultLayout';
 
-import { Container, Wrapper, MyAdress, Right } from './styles';
+import { Container, Wrapper, Right } from './styles';
 import BottomBar from '../../components/BottomBar';
 import MyOrders from '../../components/MyOrders';
 import ProfileSideBar from '../../components/ProfileSideBar';
 import { useMenu } from '../../contexts/menu';
+import MyData from '../../components/MyData';
 
 export default function Profile() {
-  const {showOrders, showAdress, showPersonalData} = useMenu();
+  const {showOrders, showPersonalData} = useMenu();
 
   return (
     <Container>
@@ -18,8 +19,7 @@ export default function Profile() {
         <ProfileSideBar />
         <Right>
           {showOrders && <MyOrders />}
-          {showAdress && <MyAdress><h1>Meus Endereços</h1></MyAdress>}
-          {showPersonalData && <MyAdress><h1>Seus Dados</h1></MyAdress>}
+          {showPersonalData && <MyData />}
         </Right>
       </Wrapper>
       <BottomBar />

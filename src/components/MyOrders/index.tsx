@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
 
 import { Container } from './styles';
+import { toast } from 'react-toastify';
 
 type IOrders = {
   id: number;
@@ -40,16 +41,21 @@ type IItem = {
 
 export default function MyOrders() {
   const [orders, setOrders] = useState<IOrders[]>([]);
-  const {getToken} = useAuth();
+  const {getToken, refreshToken} = useAuth();
 
   useEffect(() => {
     loadOrders();
     
     async function loadOrders(){
-      const response = await api.get('/orders',
-      {headers:{Authorization: `Bearer ${getToken()}`}});
-
-      setOrders(response.data.content)
+      await api.get('/orders',
+      {headers:{Authorization: `Bearer ${getToken()}`}})
+      .then((response) => {
+        setOrders(response.data.content);
+      })
+      .catch((error) => {
+        refreshToken();
+        toast.error(error.message);
+      }); 
     }
   },[getToken])
 
