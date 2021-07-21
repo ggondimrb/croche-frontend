@@ -61,14 +61,7 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
 
   useEffect(() => {
     console.log(storageUser);
-    // if (storageToken) {      
-    //   refreshToken(storageToken);
-    //   setUser(storageUser);
-    // }
-
     setLoading(false);       
-
-    // eslint-disable-next-line
   }, [user]);
 
   async function signIn(mail:string,senha:string) {
@@ -137,8 +130,6 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
   async function setDataUser(mail: string) {
 
   const response = await api.get<UserProps>(`clientes/${mail}`);  
-
-  console.log(response);
 
   const {
     id,

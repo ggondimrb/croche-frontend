@@ -10,6 +10,25 @@ export const FormData = styled(Form)`
     padding: 20px;
     border-radius: 25px;
     align-items: center;
+
+    div > div {
+        input {
+            width: 400px;
+        }
+    }
+`;
+
+export const FormEditAdress = styled(Form)`
+    
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        
+        input {
+            width: 400px;
+        }        
+    }
 `;
 
 export const Container = styled.div`

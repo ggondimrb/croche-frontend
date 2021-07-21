@@ -38,6 +38,10 @@ export default createGlobalStyle`
     }
  }
 
+ .ant-spin-dot-item {
+  background-color: #9e5f39;
+}
+
 
  ul{
   list-style: none;
