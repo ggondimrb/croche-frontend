@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { MdLocalShipping, MdHome, MdAccountCircle } from "react-icons/md";
+import { MdLocalShipping, MdAccountCircle } from "react-icons/md";
 
 import { Container } from './styles';
 import { useMenu } from '../../contexts/menu';
@@ -30,7 +30,7 @@ function ProfileSideBar() {
 
   useEffect(() => {
     setPathSelect(params.id);
-  },[params.id])
+  },[setPathSelect, params.id])
 
   return (
     <Container>

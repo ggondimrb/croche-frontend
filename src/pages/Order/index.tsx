@@ -112,7 +112,7 @@ function Order() {
               {order?.itens.map(item => {
                 return (
                   <Item>
-                    <img src={item.product.imagens[0].url} />
+                    <img src={item.product.imagens[0].url} alt={item.product.nome} />
                     <aside>
                       <h3>{item.product.nome}</h3>
                       <p>Quantidade: <strong>{item.amount}</strong></p>

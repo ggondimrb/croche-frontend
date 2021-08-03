@@ -57,7 +57,7 @@ export default function MyOrders() {
         toast.error(error.message);
       }); 
     }
-  },[getToken])
+  },[getToken, refreshToken])
 
   return (
     <Container>

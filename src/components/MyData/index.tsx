@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Spin, Modal, message } from 'antd';
-import MaskedInput from 'antd-mask-input';
+import { Form, Input, Button, Spin, Modal } from 'antd';
 
+import { toast } from 'react-toastify';
 import { Container, FormData, FormEditAdress } from './styles';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
+import apiCep from '../../services/apiCep';
+
+type DataCep = {
+  logradouro: string;
+  bairro: string;
+  localidade: string;
+  erro: string;
+}
 
 function MyData() {
   const {user, getToken, refreshToken} = useAuth();
@@ -28,11 +36,11 @@ function MyData() {
       {mail: user.email, password: values.password, newPassword: values.newPassword, confirmNewPassword: values.confirmNewPassword},
       {headers:{Authorization: `Bearer ${getToken()}`}})
       .then(() => {
-        message.success("Senha atualizada com sucesso!");
+        toast.success("Senha atualizada com sucesso!");
         formNewPassword.resetFields();
         setIsModalVisible(false);
       }).catch(e => {
-        message.error(e.response.data.message);
+        toast.error(e.response.data.message);
       })
     })
     .catch(info => {
@@ -48,16 +56,23 @@ function MyData() {
     formEditAdress
     .validateFields()
     .then(values => {
+      console.log(values);
       api.put(`/enderecos/${user.id}`,
-      {cep: values.cep, complement: values.complement, num: values.number},
+      {
+        cep: values.cep, 
+        complement: values.complement, 
+        num: values.number,
+        district: values.district,
+        street: values.street
+      },
       {headers:{Authorization: `Bearer ${getToken()}`}})
       .then(() => {
-        message.success("Endereço atualizado com sucesso!");
+        toast.success("Endereço atualizado com sucesso!");
         refreshToken();
         setIsModalEditAdressVisible(false);
       })
       .catch((e) => {
-        message.error(e.response.data.message);
+        toast.error(e.response.data.message);
       })
       .finally(() => {
         setLoading(false);
@@ -87,11 +102,11 @@ function MyData() {
     {email: user.email, name:values.name, cellphone: values.cellphone},
     {headers:{Authorization: `Bearer ${getToken()}`}})
     .then(() => {
-      message.success("Usuário atualizado com sucesso!");
+      toast.success("Usuário atualizado com sucesso!");
       refreshToken();
     })
     .catch((e) => {
-      message.error(e.response.data.message);
+      toast.error(e.response.data.message);
     })
     .finally(() => {
       setLoading(false);
@@ -104,7 +119,26 @@ function MyData() {
 
   const changeCep = (cep: string) => {
     if(cep.length === 8) {
-      
+      setLoadingCep(true);
+      apiCep.get<DataCep>(`/${cep}/json`)
+      .then(response => {
+        if (response.data.erro) {
+          toast.error('CEP não encontrado.')
+          formEditAdress.resetFields();
+          return
+        }
+        formEditAdress.setFieldsValue({
+          'street': response.data.logradouro,
+          'district': response.data.bairro,
+          'city': response.data.localidade
+        });
+      })
+      .finally(() => {
+        setLoadingCep(false);        
+      })
+
+    } else {
+      setLoadingCep(false);
     }
   }
 
@@ -130,10 +164,9 @@ function MyData() {
                   maxLength={30}/>
               </Form.Item>
               <Form.Item
-                label="E-mail atual"
+                label="E-mail"
                 name="mail"
-                initialValue={user.email}
-                rules={[{ required: true, message: 'Informe o e-mail!' }]}>
+                initialValue={user.email}>
                 <Input disabled />
               </Form.Item>              
               <Form.Item
@@ -147,7 +180,7 @@ function MyData() {
                 label="Celular"
                 name="cellphone"
                 initialValue={user.cellphone}
-                rules={[{ required: true, message: 'Informe o telefone!' }]}
+                rules={[{ required: true, message: 'Informe o celular com DDD.', min:10 }]}
               >
                 <Input maxLength={11} />
               </Form.Item>   
@@ -209,56 +242,68 @@ function MyData() {
           title="Editar endereço" 
           visible={isModalEditAdressVisible} 
           onOk={handleOkEditAdress} 
-          okText="Salvar Informações"
+          okText="Salvar Endereço"
           onCancel={handleCancelEditAdress}
           cancelText="Cancelar">
-          <FormEditAdress
-            layout="vertical"
-            form={formEditAdress}>
-            <Form.Item
-              label="CEP"
-              name="cep"
-              initialValue={user.cep}    
-              hasFeedback={loadingCep}
-              validateStatus="validating"
-              rules={[{ required: true, type: 'number'}]}>
-              <Input
-                onChange={(e) => changeCep(e.target.value)}
-                maxLength={8}/>
-            </Form.Item>
-            <Form.Item
-              label="Endereço"
-              initialValue={user.street}
-              name="address">
-              <Input
-                disabled={true}/>
-            </Form.Item>
-            <div>
+          <Spin 
+            tip="Carregando..." 
+            spinning={loadingCep}>
+            <FormEditAdress
+              layout="vertical"
+              form={formEditAdress}>
               <Form.Item
-                label="Número"
-                initialValue={user.num}
-                name="number">
+                label="CEP"
+                name="cep"
+                initialValue={user.cep}    
+                hasFeedback={loadingCep}
+                validateStatus="validating"
+                rules={[{ required: true }]}>
                 <Input
-                  style={{width: '200px'}}
-                  type="number"/>
+                  onChange={(e) => changeCep(e.target.value)}
+                  maxLength={8}/>
               </Form.Item>
               <Form.Item
-                label="Complemento (opcional)"
-                initialValue={user.complement}
-                name="complement">
+                label="Endereço"
+                initialValue={user.street}
+                name="street">
                 <Input
-                  style={{width: '200px'}}
-                  maxLength={50}/>
+                  disabled={true}/>
               </Form.Item>
-            </div>
-            <Form.Item
-              label="Bairro"
-              initialValue={user.district}
-              name="district">
-              <Input
-                disabled={true}/>
-            </Form.Item>            
-          </FormEditAdress>
+              <div>
+                <Form.Item
+                  label="Número"
+                  initialValue={user.num}
+                  rules={[{ required: true, message: 'O número é obrigatório!' }]}
+                  name="number">
+                  <Input
+                    style={{width: '200px'}}
+                    type="number"/>
+                </Form.Item>
+                <Form.Item
+                  label="Complemento (opcional)"
+                  initialValue={user.complement}
+                  name="complement">
+                  <Input
+                    style={{width: '200px'}}
+                    maxLength={50}/>
+                </Form.Item>
+              </div>
+              <Form.Item
+                label="Bairro"
+                initialValue={user.district}
+                name="district">
+                <Input
+                  disabled={true}/>
+              </Form.Item>  
+              <Form.Item
+                label="Cidade"
+                initialValue={user.city}
+                name="city">
+                <Input
+                  disabled={true}/>
+              </Form.Item>                         
+            </FormEditAdress>
+          </Spin>
         </Modal>          
     </Container>
   );

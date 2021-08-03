@@ -60,7 +60,6 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log(storageUser);
     setLoading(false);       
   }, [user]);
 

@@ -67,6 +67,13 @@ const Identification: React.FC = () => {
   const { signIn } = useAuth();
   const { register, handleSubmit, errors } = useForm<FormValues>();
   const history = useHistory();
+  const [cep, setCep] = useState<string>('');
+  const [cpf, setCpf] = useState<string>('');
+
+  const [cepValid, setCepValid] = useState<Boolean>(true);
+  const [cpfValid, setCpfValid] = useState<Boolean>(true);  
+  
+  const [adress, setAdress] = useState<Adress>({} as Adress);  
   
 
   const onSubmit = handleSubmit((data) => {
@@ -131,14 +138,6 @@ const Identification: React.FC = () => {
   function validateCep(cep: string) {
     return (cep && cep.length === 9 && cep.replace(/[^0-9]/g,"").length === 8);
   }
-
-  const [cep, setCep] = useState<string>('');
-  const [cpf, setCpf] = useState<string>('');
-
-  const [cepValid, setCepValid] = useState<Boolean>(true);
-  const [cpfValid, setCpfValid] = useState<Boolean>(true);  
-  
-  const [adress, setAdress] = useState<Adress>({} as Adress);
 
   async function findAdress() {
     console.log(cep);
