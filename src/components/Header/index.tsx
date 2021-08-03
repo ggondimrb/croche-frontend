@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { Container, Wrapper, Left, Right, Instagram } from "./styles";
+import { Container, Wrapper, Left, Right, Instagram, Links } from "./styles";
 
 import { MdAccountCircle } from "react-icons/md";
 import instagram from "../../assets/images/instagram.png";
@@ -20,9 +20,11 @@ const Header: React.FC = () => {
             style={{ fill: '#fff', marginTop:'3', marginRight:'5' }}/>
           </Link>}
           <h4>Olá {user ? user.name : ''}!</h4>
-          {!signed && <Link to="/login/home">Entrar</Link>}
-          {!signed && <Link to="/register">Cadastrar</Link>}
-          {signed && <Link onClick={signOut} to="/">Sair</Link>}
+          <Links>
+            {!signed && <Link to="/login/home">Entrar</Link>}
+            {!signed && <Link to="/register">Cadastrar</Link>}
+            {signed && <Link onClick={signOut} to="/">Sair</Link>}
+          </Links>
         </Left> 
         <Right>
           <a href="https://www.instagram.com/crochedemainha.art" >

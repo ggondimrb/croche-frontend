@@ -78,7 +78,7 @@ const Checkout: React.FC = () => {
                 <div>
                   <img src={product.image} alt={product.name}/> 
                   <aside>
-                    <h3>{product.name}</h3>
+                    <h3>{product.name} - {product.color}</h3>
                     <h3>{product.priceFormatted} x {product.qtd}</h3>
                     <h3>Total: {product.subTotal}</h3>
                   </aside>

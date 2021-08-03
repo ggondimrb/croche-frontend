@@ -33,6 +33,11 @@ export const Left = styled.div`
     line-height: 3;
   }
 
+`;
+
+export const Links = styled.div`
+  
+
   a:before {
     content: "•";
     margin: 0 7px 0 10px;
