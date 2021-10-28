@@ -9,7 +9,6 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const ButtonColor: React.FC<ButtonProps> = ({colorSelected, ...rest}) => {      
 
   function getRgbColor() : string {
-
     if(colorSelected === 'VERDE') {
       return '#008000';
     } else if (colorSelected === 'AZUL') {
@@ -18,6 +17,8 @@ const ButtonColor: React.FC<ButtonProps> = ({colorSelected, ...rest}) => {
       return '#c70000';
     } else if (colorSelected === 'ROXO') {
       return '#9400D3';
+    } else if (colorSelected === 'VINHO') {
+      return '#5E1224'
     }
     return '';
   }

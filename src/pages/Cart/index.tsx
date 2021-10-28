@@ -137,7 +137,7 @@ const Cart: React.FC = () => {
         <Products>          
           <h1>Meu carrinho</h1>
           {actualCart.map((product) => (              
-          <Item key={product.id}>
+          <Item key={product.id + product.color}>
             <ItemContent>     
               <ImageLink to={`/product/${product.id}`}>
                 <img src={product.image} alt={product.name}/> 

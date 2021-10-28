@@ -54,6 +54,7 @@ export const Right = styled.div`
 
   a {
     width: 100%;
+    height: 100%;
     color: white;
     text-decoration: none;   
     align-self: center;
@@ -64,6 +65,6 @@ export const Right = styled.div`
 
 export const Instagram = styled.img`
   width: 30px;
-  height: 30px;
-  margin: 5px;
+  height: 100%;
+  margin-top: -10px;
 `;
